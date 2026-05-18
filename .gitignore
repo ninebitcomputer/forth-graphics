@@ -1,1 +1,3 @@
 .direnv/
+external/
+.ccls-cache/

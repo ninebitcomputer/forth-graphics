@@ -32,10 +32,26 @@
       devShells = forEachSupportedSystem (
         { pkgs, system }:
         {
-          default = pkgs.mkShellNoCC {
+          default = pkgs.mkShell {
             # The Nix packages provided in the environment
             # Add any you need here
-            packages = with pkgs; [ gforth raylib nasm ];
+            packages = with pkgs; [ 
+			  gforth
+			  raylib
+			  nasm 
+
+			  libGL
+
+			  # X11 dependencies
+			  libx11
+			  libx11.dev
+			  libxcursor
+			  libxi
+			  libxinerama
+			  pkgs.libxrandr
+			];
+
+			LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [pkgs.alsa-lib];
 
             # Set any environment variables for your dev shell
             env = { };
