@@ -7,6 +7,7 @@ c-library raylib
   	cfield: Color-a
   end-structure
 
+
   : >Color ( r g b a -- addr )
 	Color allocate throw >R
 	R@ Color-a c!
@@ -14,6 +15,25 @@ c-library raylib
 	R@ Color-g c!
 	R@ Color-r c!
 	R> ;
+
+  begin-structure Vector2
+	sffield: Vector2-x
+	sffield: Vector2-y
+  end-structure
+
+
+  : Vector2! ( x y addr -- )
+	dup Vector2-x sf!
+	Vector2-y sf! ;
+
+  : Vector2@ ( addr -- x y)
+	dup Vector2-x sf@
+	Vector2-y sf@ ;
+
+  : >Vector2 ( x y -- addr)
+	Vector2 allocate throw
+	dup Vector2! ;
+
 
   0 0 0 255 			>Color Constant BLACK
   255 255 255 255		>Color Constant WHITE
@@ -32,5 +52,6 @@ c-library raylib
   c-function EndDrawing EndDrawing -- void
 
   c-function DrawText DrawText a n n n a{*(Color*)} -- void
+  c-function DrawCircleV DrawCircleV a{*(Vector2 *)} n a{*(Color *)} -- void
 
 end-c-library
