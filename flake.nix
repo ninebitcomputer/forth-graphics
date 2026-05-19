@@ -40,6 +40,8 @@
 			  raylib
 			  nasm 
 
+			  libtool
+
 			  libGL
 
 			  # X11 dependencies
