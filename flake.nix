@@ -39,6 +39,7 @@
 			  gforth
 			  raylib
 			  nasm 
+			  gef
 
 			  libtool
 
