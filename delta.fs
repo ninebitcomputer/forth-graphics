@@ -1,4 +1,5 @@
 require ./raylib.fs
+require ./buffer.fs
 
 42.0e fconstant speed
 800 constant swidth
@@ -17,20 +18,27 @@ require ./raylib.fs
   32e 100e >Vector2
   32e 200e >Vector2
 
-  800 450 s" delta time" drop InitWindow
+  swidth sheight s" delta time" drop InitWindow
 
   begin
 	WindowShouldClose 0=
   while ( pos1 pos2 )
 	over update-delta
 
+	sbuf-init
 	BeginDrawing
 	  WHITE ClearBackground
 
 	  dup 20 GREEN DrawCircleV
 	  over 20 RED DrawCircleV
+
+	  s" dynamically generated string test" %s sbuf-save-str0 drop
+	  10 10 20 BLACK DrawText
+
 	
 	EndDrawing
+	sbuf-finish
+
   repeat
 
   CloseWindow 
