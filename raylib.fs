@@ -1,9 +1,9 @@
 c-library raylib
 
   begin-structure Color
-    cfield: Color-b
-	cfield: Color-r
+    cfield: Color-r
 	cfield: Color-g
+	cfield: Color-b
   	cfield: Color-a
   end-structure
 
@@ -23,8 +23,8 @@ c-library raylib
 
 
   : Vector2! ( x y addr -- )
-	dup Vector2-x sf!
-	Vector2-y sf! ;
+	dup Vector2-y sf!
+	Vector2-x sf! ;
 
   : Vector2@ ( addr -- x y)
 	dup Vector2-x sf@
@@ -36,6 +36,8 @@ c-library raylib
 
 
   0 0 0 255 			>Color Constant BLACK
+  255 0 0 255			>Color Constant RED
+  0 255 0 255 			>Color Constant GREEN
   255 255 255 255		>Color Constant WHITE
 
   s" raylib" add-lib
@@ -53,5 +55,8 @@ c-library raylib
 
   c-function DrawText DrawText a n n n a{*(Color*)} -- void
   c-function DrawCircleV DrawCircleV a{*(Vector2 *)} n a{*(Color *)} -- void
+
+  c-function GetFrameTime GetFrameTime -- r
+  c-function TextFormat TextFormat s ... -- s
 
 end-c-library
