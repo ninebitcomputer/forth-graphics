@@ -4,12 +4,10 @@ variable sbuf-work-off 0 sbuf-work-off !
 
 create sbuf SBUF-CAP allot
 
-: sbuf-init ( -- )
+: sbuf-reset ( -- )
   0 sbuf-used !
   0 sbuf-used !
   0 sbuf-work-off ! ;
-
-: sbuf-finish ( -- ) ;
 
 : sbuf-a-cur ( -- addr ) sbuf sbuf-used @ + ;
 : sbuf-a-work ( -- addr ) sbuf sbuf-work-off @ + ;
@@ -36,6 +34,7 @@ create sbuf SBUF-CAP allot
 
 
 : test
+  sbuf-reset
   'p' %c
   'o' %c
   'o' %c

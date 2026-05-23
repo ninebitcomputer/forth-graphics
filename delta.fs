@@ -25,7 +25,7 @@ require ./buffer.fs
   while ( pos1 pos2 )
 	over update-delta
 
-	sbuf-init
+	sbuf-reset
 	BeginDrawing
 	  WHITE ClearBackground
 
@@ -37,7 +37,6 @@ require ./buffer.fs
 
 	
 	EndDrawing
-	sbuf-finish
 
   repeat
 
