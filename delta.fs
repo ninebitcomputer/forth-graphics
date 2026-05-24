@@ -30,11 +30,13 @@ variable fps 60 fps !
   while ( pos1 pos2 )
 	GetMouseWheelMove
 	fdup 0e f<> if
-	  fdup f>d d>s
+	  f>d d>s
 	  fps @ +
 	  dup 0 < if drop 0 then
 	  dup fps ! SetTargetFPS
-	then fdrop
+	else 
+	  fdrop
+	then
 
 	over GetFrameTime 6.0e speed f* f* update-x
 	dup 0.1e speed f* update-x
