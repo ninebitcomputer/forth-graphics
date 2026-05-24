@@ -60,6 +60,7 @@ c-library raylib
   c-function DrawCircleV DrawCircleV a{*(Vector2 *)} n a{*(Color *)} -- void
 
   c-function GetFrameTime GetFrameTime -- r
+  c-function GetMouseWheelMove GetMouseWheelMove -- r
 
 
 end-c-library
