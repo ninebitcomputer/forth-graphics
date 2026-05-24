@@ -1,3 +1,5 @@
+require ./util.fs
+
 c-library raylib
 
   begin-structure Color
@@ -35,12 +37,27 @@ c-library raylib
 	dup Vector2! ;
 
   : vec2-piecewise ( x1 y1 x2 y2 xt -- x y)
-	>r
-	frot fswap r@ execute
-	frot frot r> execute fswap ;
+	frot fswap dup execute
+	frot frot execute fswap ;
+
+  : vec2-scalar ( x y s xt -- x y )
+	ftuck dup execute
+	frot frot execute fswap ;
+
+  : vec2-apply ( x1 y1 xt -- x y )
+	fswap dup execute
+	fswap execute ;
 
   : vec2- ( x1 y1 x2 y2 -- x y ) ['] f- vec2-piecewise ;
   : vec2+ ( x1 y1 x2 y2 -- x y ) ['] f+ vec2-piecewise ;
+
+  : vec2s- ( x y s -- x y ) ['] f- vec2-scalar ;
+  : vec2s+ ( x y s -- x y ) ['] f+ vec2-scalar ;
+  : vec2s* ( x y s -- x y ) ['] f* vec2-scalar ;
+  : vec2s/ ( x y s -- x y ) ['] f/ vec2-scalar ;
+
+  : vec2-msr ( x y -- msr ) ['] fsq vec2-apply f+ ;
+  : vec2-mag ( x y -- mag ) vec2-msr fsqrt ;
 
   0 0 0 255 			>Color Constant BLACK
   255 0 0 255			>Color Constant RED
