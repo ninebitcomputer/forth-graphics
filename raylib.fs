@@ -36,6 +36,7 @@ c-library raylib
 	Vector2 allocate throw
 	dup Vector2! ;
 
+
   : vec2-piecewise ( x1 y1 x2 y2 xt -- x y)
 	frot fswap dup execute
 	frot frot execute fswap ;

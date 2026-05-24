@@ -35,7 +35,7 @@ create tempv Vector2 allot
 
 	  vec2-
 	  fover fover
-	  vec2-mag fdup 10e f< if
+	  vec2-mag fdup 5e f< if
 		fdrop fdrop fdrop 0e 0e
 	  else
 		vec2s/ follow-speed vec2s*
