@@ -34,6 +34,13 @@ c-library raylib
 	Vector2 allocate throw
 	dup Vector2! ;
 
+  : vec2-piecewise ( x1 y1 x2 y2 xt -- x y)
+	>r
+	frot fswap r@ execute
+	frot frot r> execute fswap ;
+
+  : vec2- ( x1 y1 x2 y2 -- x y ) ['] f- vec2-piecewise ;
+  : vec2+ ( x1 y1 x2 y2 -- x y ) ['] f+ vec2-piecewise ;
 
   0 0 0 255 			>Color Constant BLACK
   255 0 0 255			>Color Constant RED
@@ -58,9 +65,13 @@ c-library raylib
 
   c-function DrawText DrawText a n n n a{*(Color*)} -- void
   c-function DrawCircleV DrawCircleV a{*(Vector2 *)} n a{*(Color *)} -- void
+  c-function DrawLineV DrawLineV a{*(Vector2 *)} a{*(Vector2 *)} a{*(Color *)} -- void
 
   c-function GetFrameTime GetFrameTime -- r
   c-function GetMouseWheelMove GetMouseWheelMove -- r
+
+  c-function GetMouseX GetMouseX -- n
+  c-function GetMouseY GetMouseY -- n
 
 
 end-c-library
