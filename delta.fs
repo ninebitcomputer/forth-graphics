@@ -32,7 +32,8 @@ require ./buffer.fs
 	  dup 20 GREEN DrawCircleV
 	  over 20 RED DrawCircleV
 
-	  s" dynamically generated string test" %s sbuf-save-str0 drop
+	  1111.7e 1 %f s"  dynamically generated string test " %s 67 %d
+	  sbuf-save-str0 drop
 	  10 10 20 BLACK DrawText
 
 	
