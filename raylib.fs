@@ -38,6 +38,7 @@ c-library raylib
   0 0 0 255 			>Color Constant BLACK
   255 0 0 255			>Color Constant RED
   0 255 0 255 			>Color Constant GREEN
+  0 0 255 255			>Color Constant BLUE
   255 255 255 255		>Color Constant WHITE
 
   s" raylib" add-lib
@@ -48,6 +49,8 @@ c-library raylib
   c-function CloseWindow CloseWindow -- void
 
   c-function SetTargetFPS SetTargetFPS n -- void
+  c-function GetFPS GetFPS -- n
+
   c-function ClearBackground ClearBackground a{*(Color *)} -- void
 
   c-function BeginDrawing BeginDrawing -- void
@@ -57,6 +60,6 @@ c-library raylib
   c-function DrawCircleV DrawCircleV a{*(Vector2 *)} n a{*(Color *)} -- void
 
   c-function GetFrameTime GetFrameTime -- r
-  c-function TextFormat TextFormat s ... -- s
+
 
 end-c-library
