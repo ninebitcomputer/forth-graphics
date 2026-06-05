@@ -9,7 +9,7 @@ require ./anim.fs
 
 60 constant fps
 
-variable addr-head 67e 67e >Vector2 addr-head !
+variable addr-head 420e 200e >Vector2 addr-head !
 create tempv Vector2 allot
 
 : head ( -- addr ) addr-head @ ;
@@ -18,6 +18,14 @@ create tempv Vector2 allot
 
   swidth sheight s" fih" drop InitWindow
   fps SetTargetFPS
+
+  
+
+
+  10e 10e 10e 10e 10e 10e 10e 12e 14e 16e 18e 20e 25e 15e 14 init-sizes
+  15e 15e 15e 15e 15e 15e 15e 15e 15e 15e 20e 20e 20e 20e 14 init-links
+  head Vector2@ move-head
+  14 init-propogate
 
   begin
 	WindowShouldClose 0=
@@ -45,13 +53,11 @@ create tempv Vector2 allot
 
 	  tempv Vector2!
 
-	  head tempv GREEN DrawLineV
-
 	  tempv Vector2@ head Vector2!
+	  head Vector2@ move-head
 
-
-
-	  head 20 RED DrawCircleV
+	  14 propogate
+	  14 draw-nodes
 
 	EndDrawing
   repeat

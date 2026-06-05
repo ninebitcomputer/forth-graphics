@@ -60,6 +60,9 @@ c-library raylib
   : vec2-msr ( x y -- msr ) ['] fsq vec2-apply f+ ;
   : vec2-mag ( x y -- mag ) vec2-msr fsqrt ;
 
+  : vec2-norm ( x y -- x' y' )
+	fover fover vec2-mag vec2s/ ;
+
   0 0 0 255 			>Color Constant BLACK
   255 0 0 255			>Color Constant RED
   0 255 0 255 			>Color Constant GREEN
@@ -83,6 +86,7 @@ c-library raylib
 
   c-function DrawText DrawText a n n n a{*(Color*)} -- void
   c-function DrawCircleV DrawCircleV a{*(Vector2 *)} n a{*(Color *)} -- void
+  c-function DrawCircleLinesV DrawCircleLinesV a{*(Vector2 *)} n a{*(Color *)} -- void
   c-function DrawLineV DrawLineV a{*(Vector2 *)} a{*(Vector2 *)} a{*(Color *)} -- void
 
   c-function GetFrameTime GetFrameTime -- r

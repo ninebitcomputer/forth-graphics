@@ -14,7 +14,7 @@ create node-table-size NODE-CAP floats allot
 
 : node ( idx -- nidx ) ; \ TODO: bounds checking
 
-: pos-addr ( nidx -- addr ) Vector2 node-table-pos + ;
+: pos-addr ( nidx -- addr ) Vector2 * node-table-pos + ;
 : link-addr ( nidx -- addr ) floats node-table-link + ;
 : size-addr ( nidx -- addr ) floats node-table-size + ;
 
@@ -36,8 +36,31 @@ create node-table-size NODE-CAP floats allot
   dup 1 < if drop exit then
   1 do 
 	r@ 1 - node dup
-	  >link
-	  pos-addr v2x>
-	  f-
-	r@ node pos-addr >v2x
+	  link>
+	  pos>
+	  frot
+	  0e
+	  vec2+
+	r@ node >pos
   loop ;
+
+: propogate ( n -- )
+  1 do
+	r@ node pos>
+	r@ 1 - node pos>
+	vec2- vec2-norm
+	r@ node link> vec2s*
+
+	r@ 1 - node pos> vec2+
+	r@ node >pos
+  loop ;
+
+: draw-nodes ( n -- )
+  0 do
+	r@ node pos-addr
+	r@ node size> f>s
+	r@ 0 = if RED else BLUE then
+
+	DrawCircleLinesV
+  loop ;
+
