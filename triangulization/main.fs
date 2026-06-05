@@ -1,0 +1,73 @@
+require ../buffer.fs
+require ../raylib.fs
+
+128 constant NPOINTS
+create pbuf NPOINTS Vector2 * allot
+variable total-points 0 total-points !
+variable draw-lines? false draw-lines? !
+
+create tempv Vector2 allot
+create mouse-pos Vector2 allot
+
+800 constant swidth
+450 constant sheight
+60 constant fps
+
+: a-point ( idx -- addr )
+	Vector2 * pbuf + ;
+
+: add-point ( px py -- )
+	total-points @ NPOINTS < 0= if 2drop exit then 
+	total-points @ a-point Vector2!
+	total-points @ 1 + total-points ! ;
+
+: draw-points ( -- )
+	total-points @ 0= if exit then
+
+	pbuf
+	total-points @ 0 do
+		dup 3 RED DrawCircleV
+		Vector2 +
+	loop drop ;
+
+: draw-lines ( -- )
+	total-points @ 3 < if exit then 
+	pbuf dup Vector2 +
+	total-points @ 1 - 0 do
+		2dup BLACK DrawLineV
+		swap drop dup Vector2 +
+	loop
+	drop pbuf BLACK DrawLineV ;
+
+: undo-point ( -- )
+	total-points @ 1 -
+	dup 0 < if drop exit then
+	total-points ! ;
+
+
+: main
+	swidth sheight s" triangle" drop InitWindow
+	fps SetTargetFPS
+
+	begin
+		WindowShouldClose 0=
+	while
+		GetMouseX s>f GetMouseY s>f mouse-pos Vector2!
+
+		KEY_L	IsKeyPressed if draw-lines? @ invert draw-lines? ! then
+		KEY_X IsKeyPressed if mouse-pos Vector2@ add-point then
+		KEY_Z IsKeyPressed if undo-point then
+
+		BeginDrawing
+			WHITE ClearBackground
+
+			mouse-pos 3 BLUE DrawCircleV
+			draw-lines? if draw-lines then
+			draw-points
+
+		EndDrawing
+	repeat
+
+	CloseWindow ;
+
+main

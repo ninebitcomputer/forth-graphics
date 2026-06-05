@@ -69,6 +69,11 @@ c-library raylib
   0 0 255 255			>Color Constant BLUE
   255 255 255 255		>Color Constant WHITE
 
+	76	Constant KEY_L
+	88	Constant KEY_X
+	90 	Constant KEY_Z
+
+
   s" raylib" add-lib
   \c #include <raylib.h>
 
@@ -78,6 +83,8 @@ c-library raylib
 
   c-function SetTargetFPS SetTargetFPS n -- void
   c-function GetFPS GetFPS -- n
+
+  c-function IsKeyPressed IsKeyPressed n -- n
 
   c-function ClearBackground ClearBackground a{*(Color *)} -- void
 
