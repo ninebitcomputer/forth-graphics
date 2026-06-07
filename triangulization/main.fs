@@ -25,7 +25,7 @@ create mouse-pos Vector2 allot
 		r@ 1 + l-next r@ cells + !
 		r@ 1 - l-prev r@ cells + !
 	loop
-	dup 1 - cells l-next + 0 swap !
+	1 - dup cells l-next + 0 swap !
 	l-prev ! ;
 
 : a-point ( idx -- addr ) Vector2 * pbuf + ;
