@@ -3,6 +3,10 @@ require ../raylib.fs
 
 128 constant NPOINTS
 create pbuf NPOINTS Vector2 * allot
+create l-next NPOINTS cells allot
+create l-prev NPOINTS cells allot
+variable cdll-head
+
 variable total-points 0 total-points !
 variable draw-lines? false draw-lines? !
 
@@ -12,6 +16,31 @@ create mouse-pos Vector2 allot
 800 constant swidth
 450 constant sheight
 60 constant fps
+
+: cdll-init ( -- )
+	total-points @
+	dup 3 < if drop exit then
+	0 cdll-head !
+	dup 0 do
+		r@ 1 + l-next r@ cells + !
+		r@ 1 - l-prev r@ cells + !
+	loop
+	dup 1 - cells l-next + 0 swap !
+	l-prev ! ;
+
+: cdll-next ( node -- node ) cells l-next + @ ;
+: cdll-prev ( node -- node ) cells l-prev + @ ;
+: polygon-filled? ( -- flag ) cdll-head @ dup cdll-next cdll-next = ;
+
+: fill-polygon ( -- )
+	total-points @ 3 < if exit then
+	cdll-init 
+
+	cdll-head @
+	begin
+		cdll-next
+	dup cdll-head @ <> while repeat
+	;
 
 : a-point ( idx -- addr )
 	Vector2 * pbuf + ;
@@ -44,7 +73,6 @@ create mouse-pos Vector2 allot
 	dup 0 < if drop exit then
 	total-points ! ;
 
-
 : main
 	swidth sheight s" triangle" drop InitWindow
 	fps SetTargetFPS
@@ -64,6 +92,7 @@ create mouse-pos Vector2 allot
 			mouse-pos 3 BLUE DrawCircleV
 			draw-lines? if draw-lines then
 			draw-points
+			fill-polygon
 
 		EndDrawing
 	repeat

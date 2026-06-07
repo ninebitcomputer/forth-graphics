@@ -41,6 +41,12 @@ c-library raylib
 	frot fswap dup execute
 	frot frot execute fswap ;
 
+  : vec2- ( x1 y1 x2 y2 -- x y ) ['] f- vec2-piecewise ;
+  : vec2+ ( x1 y1 x2 y2 -- x y ) ['] f+ vec2-piecewise ;
+	: vec2* ( x1 y1 x2 y2 -- x y ) ['] f* vec2-piecewise ;
+
+	: vec2-dot ( x1 y1 x2 y2 -- x ) vec2* f+ ;
+
   : vec2-scalar ( x y s xt -- x y )
 	ftuck dup execute
 	frot frot execute fswap ;
@@ -49,8 +55,6 @@ c-library raylib
 	fswap dup execute
 	fswap execute ;
 
-  : vec2- ( x1 y1 x2 y2 -- x y ) ['] f- vec2-piecewise ;
-  : vec2+ ( x1 y1 x2 y2 -- x y ) ['] f+ vec2-piecewise ;
 
   : vec2s- ( x y s -- x y ) ['] f- vec2-scalar ;
   : vec2s+ ( x y s -- x y ) ['] f+ vec2-scalar ;
@@ -59,6 +63,7 @@ c-library raylib
 
   : vec2-msr ( x y -- msr ) ['] fsq vec2-apply f+ ;
   : vec2-mag ( x y -- mag ) vec2-msr fsqrt ;
+	: vec2-det ( x1 y1 x2 y2 -- det ) fswap vec2* f- ;
 
   : vec2-norm ( x y -- x' y' )
 	fover fover vec2-mag vec2s/ ;
