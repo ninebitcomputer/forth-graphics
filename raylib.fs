@@ -61,6 +61,9 @@ c-library raylib
   : vec2s* ( x y s -- x y ) ['] f* vec2-scalar ;
   : vec2s/ ( x y s -- x y ) ['] f/ vec2-scalar ;
 
+	: vec2-unit ( angle -- x y ) fdup fcos fswap fsin ;
+	: vec2-new ( length angle -- x y ) vec2-unit frot vec2s* ;
+
   : vec2-msr ( x y -- msr ) ['] fsq vec2-apply f+ ;
   : vec2-mag ( x y -- mag ) vec2-msr fsqrt ;
 	: vec2-det ( x1 y1 x2 y2 -- det ) fswap vec2* f- ;

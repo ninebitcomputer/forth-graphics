@@ -28,22 +28,35 @@ create mouse-pos Vector2 allot
 	dup 1 - cells l-next + 0 swap !
 	l-prev ! ;
 
+: a-point ( idx -- addr ) Vector2 * pbuf + ;
+: point ( idx -- x y ) a-point Vector2@ ;
+
 : cdll-next ( node -- node ) cells l-next + @ ;
 : cdll-prev ( node -- node ) cells l-prev + @ ;
 : polygon-filled? ( -- flag ) cdll-head @ dup cdll-next cdll-next = ;
+
+: calculate-orientation ( pidx -- det )
+	dup cdll-prev point dup point vec2-
+	dup cdll-next point point vec2-
+	vec2-det ;
 
 : fill-polygon ( -- )
 	total-points @ 3 < if exit then
 	cdll-init 
 
 	cdll-head @
-	begin
+	begin ( cur )
+		dup a-point
+		over calculate-orientation 0e f< if GREEN else BLUE then
+		2
+		swap
+		DrawCircleV
+
+
 		cdll-next
-	dup cdll-head @ <> while repeat
+	dup cdll-head @ <> while repeat drop
 	;
 
-: a-point ( idx -- addr )
-	Vector2 * pbuf + ;
 
 : add-point ( px py -- )
 	total-points @ NPOINTS < 0= if 2drop exit then 
