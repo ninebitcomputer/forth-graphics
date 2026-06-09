@@ -40,6 +40,8 @@ create mouse-pos Vector2 allot
 	dup cdll-next point point vec2-
 	vec2-det ;
 
+: convex? ( pidx -- flag ) calculate-orientation 0e f< ;
+
 : fill-polygon ( -- )
 	total-points @ 3 < if exit then
 	cdll-init 
@@ -47,7 +49,7 @@ create mouse-pos Vector2 allot
 	cdll-head @
 	begin ( cur )
 		dup a-point
-		over calculate-orientation 0e f< if GREEN else BLUE then
+		over convex? if GREEN else BLUE then
 		2
 		swap
 		DrawCircleV
