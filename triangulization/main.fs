@@ -17,6 +17,9 @@ create mouse-pos Vector2 allot
 450 constant sheight
 60 constant fps
 
+: a-point ( idx -- addr ) Vector2 * pbuf + ;
+: point ( idx -- x y ) a-point Vector2@ ;
+
 : cdll-init ( -- )
 	total-points @
 	dup 3 < if drop exit then
@@ -28,12 +31,62 @@ create mouse-pos Vector2 allot
 	1 - dup cells l-next + 0 swap !
 	l-prev ! ;
 
-: a-point ( idx -- addr ) Vector2 * pbuf + ;
-: point ( idx -- x y ) a-point Vector2@ ;
+: l-next-a ( node -- addr ) cells l-next + ;
+: l-prev-a ( node -- addr ) cells l-prev + ;
 
-: cdll-next ( node -- node ) cells l-next + @ ;
-: cdll-prev ( node -- node ) cells l-prev + @ ;
+: >cdll-next ( val node -- ) l-next-a ! ;
+: >cdll-prev ( val node -- ) l-prev-a ! ;
+
+: cdll-next ( node -- node ) l-next-a @ ;
+: cdll-prev ( node -- node ) l-prev-a @ ;
+
+: cdll-del ( node -- ) 
+	dup cdll-next >r cdll-prev 
+	dup r@ swap >cdll-next
+	r> >cdll-prev ;
+
 : polygon-filled? ( -- flag ) cdll-head @ dup cdll-next cdll-next = ;
+
+: ta ( tidx -- tidx ) ;
+: tb ( tidx -- tidx ) cdll-next ;
+: tc ( tidx -- tidx ) cdll-next cdll-next ;
+
+: vab ( tidx -- vec ) dup tb point ta point vec2- ;
+: vac ( tidx -- vec ) dup tc point ta point vec2- ;
+: vap ( tidx pidx -- vec ) point ta point vec2- ;
+
+: bary-range? ( val area -- flag )
+	fover 0.0e f< if fdrop fdrop false exit then
+	f< ;
+
+: in-bary? ( abp apc abc -- flag )
+	f>r
+	fover fover f+ fr@ fswap f-
+
+	fr@ bary-range?
+	fr@ bary-range?
+	fr> bary-range?
+	and and ;
+
+: pit? ( tidx pidx -- flag ) 
+	over vab over vac vec2-det
+	over vab 2dup vap vec2-det
+	2dup vap drop vac vec2-det
+	frot
+	in-bary? ;
+
+: _t-cond ( end cur -- end cur flag )
+	2dup <> if 2dup pit? 0= else false then ;
+
+: good-triangle? ( tidx -- flag )
+	dup cdll-prev swap cdll-next cdll-next
+	( end cur )
+	begin
+		_t-cond
+	while
+			cdll-next
+	repeat
+	= ;
 
 : calculate-orientation ( pidx -- det )
 	dup cdll-prev point dup point vec2-
@@ -42,6 +95,11 @@ create mouse-pos Vector2 allot
 
 : convex? ( pidx -- flag ) calculate-orientation 0e f< ;
 
+: draw-triangle ( tidx color -- )
+	>r dup cdll-next a-point swap
+	dup a-point swap
+	cdll-prev a-point r> DrawTriangle ;
+
 : fill-polygon ( -- )
 	total-points @ 3 < if exit then
 	cdll-init 
@@ -49,7 +107,12 @@ create mouse-pos Vector2 allot
 	cdll-head @
 	begin ( cur )
 		dup a-point
-		over convex? if GREEN else BLUE then
+		over convex? if 
+			over good-triangle? if 
+				over GREEN draw-triangle
+				PURPLE 
+			else GREEN then
+		else BLUE then
 		2
 		swap
 		DrawCircleV
@@ -104,10 +167,11 @@ create mouse-pos Vector2 allot
 		BeginDrawing
 			WHITE ClearBackground
 
-			mouse-pos 3 BLUE DrawCircleV
 			draw-lines? if draw-lines then
 			draw-points
 			fill-polygon
+
+			mouse-pos 3 BLUE DrawCircleV
 
 		EndDrawing
 	repeat

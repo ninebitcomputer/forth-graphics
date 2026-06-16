@@ -76,6 +76,7 @@ c-library raylib
   0 255 0 255 			>Color Constant GREEN
   0 0 255 255			>Color Constant BLUE
   255 255 255 255		>Color Constant WHITE
+	200 122 255 255 	>Color Constant PURPLE
 
 	76	Constant KEY_L
 	88	Constant KEY_X
@@ -103,6 +104,7 @@ c-library raylib
   c-function DrawCircleV DrawCircleV a{*(Vector2 *)} n a{*(Color *)} -- void
   c-function DrawCircleLinesV DrawCircleLinesV a{*(Vector2 *)} n a{*(Color *)} -- void
   c-function DrawLineV DrawLineV a{*(Vector2 *)} a{*(Vector2 *)} a{*(Color *)} -- void
+	c-function DrawTriangle DrawTriangle a{*(Vector2 *)} a{*(Vector2 *)} a{*(Vector2 *)} a{*(Color *)} -- void
 
   c-function GetFrameTime GetFrameTime -- r
   c-function GetMouseWheelMove GetMouseWheelMove -- r
