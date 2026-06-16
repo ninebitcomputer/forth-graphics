@@ -45,7 +45,7 @@ create mouse-pos Vector2 allot
 	dup r@ swap >cdll-next
 	r> >cdll-prev ;
 
-: polygon-filled? ( -- flag ) cdll-head @ dup cdll-next cdll-next = ;
+: polygon-filled? ( head -- flag ) dup cdll-next cdll-next = ;
 
 : ta ( tidx -- tidx ) ;
 : tb ( tidx -- tidx ) cdll-next ;
@@ -104,22 +104,31 @@ create mouse-pos Vector2 allot
 	total-points @ 3 < if exit then
 	cdll-init 
 
-	cdll-head @
-	begin ( cur )
+	0 cdll-head @ dup
+	begin ( enc last cur )
+		2dup = if rot 1+ >r r@ -rot r> 2 < else true then
+		over polygon-filled? 0=
+		and
+	while
 		dup a-point
 		over convex? if 
 			over good-triangle? if 
-				over GREEN draw-triangle
-				PURPLE 
+				>r
+
+				dup GREEN draw-triangle
+				dup cdll-del
+				swap drop swap drop 0 swap dup cdll-next swap
+
+				r> PURPLE 
 			else GREEN then
 		else BLUE then
 		2
 		swap
 		DrawCircleV
 
-
 		cdll-next
-	dup cdll-head @ <> while repeat drop
+	repeat 2drop drop
+	( dup cdll-head @ <> while repeat drop )
 	;
 
 
